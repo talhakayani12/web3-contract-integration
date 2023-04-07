@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { loginWithMetaMask } from "./web3";
+import Dashboard from "./components/Dashboard";
 
 function App() {
+  const [connectedWallet, setConnectedWallet] = useState({
+    walletAddress: "",
+    balance: "",
+  });
+
+  const connectWallet = async () => {
+    const connectWalletResponse = await loginWithMetaMask("ethereum");
+    setConnectedWallet(connectWalletResponse);
+  };
+
+  useEffect(() => {
+    connectWallet();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Dashboard
+        connectedWallet={connectedWallet}
+        connectWallet={connectWallet}
+      />
     </div>
   );
 }
