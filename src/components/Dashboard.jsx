@@ -1,3 +1,5 @@
+import ContractFunction from "./ContractFunctions";
+
 function Dashboard({ connectedWallet, connectWallet }) {
   console.log("connected Wallet: ", connectedWallet);
   return (
@@ -7,6 +9,7 @@ function Dashboard({ connectedWallet, connectWallet }) {
         <div>
           <p>Connected Wallet: {connectedWallet?.walletAddress}</p>
           <p>Balance: {connectedWallet?.balance}</p>
+          <ContractFunction connectedWallet={connectedWallet} />
         </div>
       ) : (
         <button onClick={async () => await connectWallet()}>
