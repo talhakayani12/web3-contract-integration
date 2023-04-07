@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { getTotalSupply } from "../web3/ContractIntegrations";
+import { getTotalSupply, deposit } from "../web3/ContractIntegrations";
 
 function ContractFunction({ connectedWallet }) {
   const [totalSupply, setTotalSupply] = useState(0);
 
   const handleTotalSupplyClick = async () => {
+    const depositResponse = await deposit(10);
+    console.log(
+      "file: ContractFunctions.jsx:9 ~ handleTotalSupplyClick ~ depositResponse:",
+      depositResponse
+    );
     const totalSupplyResponse = await getTotalSupply();
     console.log(
       "file: ContractFunctions.jsx:9 ~ handleTotalSupplyClick ~ totalSupplyResponse:",

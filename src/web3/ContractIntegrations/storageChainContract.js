@@ -1,11 +1,3 @@
-// const getContractName = async (contractAddress: string) => {
-//   const web3 = await getWeb3();
-//   const contract = initContract(
-//     web3,
-//     COMMON_CONTRACT_ABI.contractABI,
-//     contractAddress
-//   );
-
 import { CONTRACT_DETAILS } from "../config";
 import { getWeb3 } from "../index";
 
@@ -14,18 +6,23 @@ const initContract = (web3, contractABI, contractAddress) => {
   return contract;
 };
 
+const getContract = async (web3) => {
+  const networkChainId = await web3.eth.getChainId();
+  const contractDetails = CONTRACT_DETAILS[networkChainId];
+
+  const contract = initContract(
+    web3,
+    contractDetails?.abi,
+    contractDetails?.address
+  );
+  return contract;
+};
+
 export const getTotalSupply = async () => {
   try {
     const web3 = await getWeb3();
 
-    const networkChainId = await web3.eth.getChainId();
-    const contractDetails = CONTRACT_DETAILS[networkChainId];
-
-    const contract = initContract(
-      web3,
-      contractDetails?.abi,
-      contractDetails?.address
-    );
+    const contract = await getContract(web3);
 
     const totalSupplyContractResponse = await contract.methods
       .totalSupply()
@@ -43,16 +40,7 @@ export const getTotalSupply = async () => {
 export const getContractName = async () => {
   try {
     const web3 = await getWeb3();
-
-    const networkChainId = await web3.eth.getChainId();
-    const contractDetails = CONTRACT_DETAILS[networkChainId];
-
-    const contract = initContract(
-      web3,
-      contractDetails?.abi,
-      contractDetails?.address
-    );
-
+    const contract = await getContract(web3);
     const contractNameContractResponse = await contract.methods.name().call();
 
     return contractNameContractResponse;
@@ -61,5 +49,30 @@ export const getContractName = async () => {
       "file: storageChainContract.js:58 ~ getContractName ~ err:",
       err
     );
+  }
+};
+
+// Write function implemnetation
+
+export const deposit = async (depositAmount) => {
+  try {
+    const web3 = await getWeb3();
+    const accounts = await web3.eth.getAccounts();
+
+    const contract = await getContract(web3);
+    const depositAmountWei = web3.utils.toWei(depositAmount.toString());
+
+    const estimatedGasFees = await contract.methods
+      .Deposit()
+      .estimateGas({ from: accounts[0] });
+    const depositContractResponse = await contract.methods.Deposit().send({
+      from: accounts[0],
+      gas: estimatedGasFees,
+      value: depositAmountWei,
+    });
+
+    return depositContractResponse;
+  } catch (err) {
+    console.error("file: storageChainContract.js:73 ~ deposit ~ err:", err);
   }
 };
