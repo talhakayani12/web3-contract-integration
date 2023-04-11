@@ -65,6 +65,7 @@ export const deposit = async (depositAmount) => {
     const estimatedGasFees = await contract.methods
       .Deposit()
       .estimateGas({ from: accounts[0] });
+
     const depositContractResponse = await contract.methods.Deposit().send({
       from: accounts[0],
       gas: estimatedGasFees,

@@ -56,6 +56,10 @@ const getChainId = async () => {
 };
 
 const addMultichainNetwork = async (networkParams) => {
+  console.log(
+    "file: index.jsx:59 ~ addMultichainNetwork ~ networkParams:",
+    networkParams
+  );
   try {
     await window.ethereum.request({
       method: "wallet_addEthereumChain",
@@ -74,6 +78,10 @@ const addingChainNetworkIfNotExsists = async (chainId, networkParams) => {
     });
     return true;
   } catch (err) {
+    console.error(
+      "file: index.jsx:77 ~ addingChainNetworkIfNotExsists ~ err:",
+      err
+    );
     if (err.code === 4902) {
       try {
         await addMultichainNetwork(networkParams);
@@ -88,6 +96,19 @@ const addingChainNetworkIfNotExsists = async (chainId, networkParams) => {
 const checkForMetamaskNetwork = async (selectedBlockChainType) => {
   if (!isMetaMaskAvailable()) return false;
   const chainId = await getChainId();
+
+  if (selectedBlockChainType === "storagechain") {
+    console.log(
+      "this is running...",
+      process.env.REACT_APP_NETWORK === "devnet"
+    );
+    if (process.env.REACT_APP_NETWORK === "devnet") {
+      return addingChainNetworkIfNotExsists(
+        "0x2236",
+        networks.storagechain.testnet
+      );
+    }
+  }
 
   if (selectedBlockChainType === "ethereum") {
     if (process.env.REACT_APP_NETWORK !== "devnet" && chainId !== 1) {

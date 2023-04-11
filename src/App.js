@@ -10,7 +10,7 @@ function App() {
   });
 
   const connectWallet = async () => {
-    const connectWalletResponse = await loginWithMetaMask("ethereum");
+    const connectWalletResponse = await loginWithMetaMask("storagechain");
     setConnectedWallet(connectWalletResponse);
   };
 

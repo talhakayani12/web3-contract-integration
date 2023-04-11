@@ -17,6 +17,7 @@ function ContractFunction({ connectedWallet }) {
     );
     setTotalSupply(totalSupplyResponse);
   };
+
   return (
     <div>
       <div>

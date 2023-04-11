@@ -1,4 +1,17 @@
 export const networks = {
+  storagechain: {
+    testnet: {
+      chainId: "0x2236",
+      chainName: "StorageChain Testnet",
+      nativeCurrency: {
+        name: "Storchain",
+        symbol: "STOR",
+        decimals: 18,
+      },
+      rpcUrls: ["http://128.199.5.56:9933/"],
+      // blockExplorerUrls: [],
+    },
+  },
   ethereum: {
     mainnet: {
       chainId: "0x1",
