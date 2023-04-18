@@ -1,16 +1,16 @@
 [
   {
     "inputs": [],
-    "name": "flipPauseState",
+    "name": "depositStor",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "LocktotalCollateral",
+    "name": "flipPauseState",
     "outputs": [],
-    "stateMutability": "payable",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -33,28 +33,36 @@
     "type": "event"
   },
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
       },
       {
-        "internalType": "address payable",
-        "name": "receiver",
-        "type": "address"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
       }
     ],
-    "name": "releaseCollateral",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
+    "name": "Received",
+    "type": "event"
   },
   {
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "transferIntoTreasury",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -76,18 +84,21 @@
         "internalType": "address",
         "name": "userAddress",
         "type": "address"
-      }
-    ],
-    "name": "checkCollateral",
-    "outputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "transferStorToUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   },
   {
     "inputs": [],
@@ -117,7 +128,7 @@
   },
   {
     "inputs": [],
-    "name": "totalCollateral",
+    "name": "treasury",
     "outputs": [
       {
         "internalType": "uint256",

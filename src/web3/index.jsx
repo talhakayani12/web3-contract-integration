@@ -150,7 +150,7 @@ const getAccounts = async () => {
 };
 
 const getAccountBalance = async (walletAddress, selectedBlockChainType) => {
-  const web3 = await getWeb3();
+  const web3 = await getWeb3(selectedBlockChainType);
   return web3.utils.fromWei(await web3.eth.getBalance(walletAddress));
 };
 
@@ -178,54 +178,54 @@ const connect = async (selectedBlockChainType) => {
   return wallet;
 };
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-}
+// function getRandomInt(min, max) {
+//   min = Math.ceil(min);
+//   max = Math.floor(max);
+//   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+// }
 
-const getNonceString = async (walletAddress, selectedBlockChainType) => {
-  try {
-    const res = { data: getRandomInt(10000, 10000) };
-    // getUserNonceByWalletAddress(
-    //   walletAddress,
-    //   selectedBlockChainType
-    // );
+// const getNonceString = async (walletAddress, selectedBlockChainType) => {
+//   try {
+//     const res = { data: getRandomInt(10000, 10000) };
+//     // getUserNonceByWalletAddress(
+//     //   walletAddress,
+//     //   selectedBlockChainType
+//     // );
 
-    return {
-      nonceString: `I am signing my one-time nonce for Piqsol: ${res?.data?.nonce}`,
-      nonceValue: res?.data?.nonce,
-    };
-  } catch (err) {
-    console.log("🚀 ~ file: config.tsx ~ line 143 ~ getNonceString ~ err", err);
-  }
-};
+//     return {
+//       nonceString: `I am signing my one-time nonce for Piqsol: ${res?.data?.nonce}`,
+//       nonceValue: res?.data?.nonce,
+//     };
+//   } catch (err) {
+//     console.log("🚀 ~ file: config.tsx ~ line 143 ~ getNonceString ~ err", err);
+//   }
+// };
 
-const getUserNonceForMetaMask = async (
-  walletAddress,
-  selectedBlockChainType
-) => {
-  try {
-    const nonceMessageWithNonce = await getNonceString(
-      walletAddress,
-      selectedBlockChainType
-    );
-    if (nonceMessageWithNonce === true) return true;
-    const web3 = await getWeb3();
-    const signature = await web3.eth.personal.sign(
-      web3.utils.fromUtf8(nonceMessageWithNonce?.nonceString),
-      walletAddress,
-      "One time nonce"
-    );
+// const getUserNonceForMetaMask = async (
+//   walletAddress,
+//   selectedBlockChainType
+// ) => {
+//   try {
+//     const nonceMessageWithNonce = await getNonceString(
+//       walletAddress,
+//       selectedBlockChainType
+//     );
+//     if (nonceMessageWithNonce === true) return true;
+//     const web3 = await getWeb3();
+//     const signature = await web3.eth.personal.sign(
+//       web3.utils.fromUtf8(nonceMessageWithNonce?.nonceString),
+//       walletAddress,
+//       "One time nonce"
+//     );
 
-    return { signature, nonce: nonceMessageWithNonce?.nonceValue };
-  } catch (err) {
-    console.log(
-      "🚀 ~ file: config.tsx ~ line 150 ~ getUserNonceForMetaMask ~ err",
-      err
-    );
-  }
-};
+//     return { signature, nonce: nonceMessageWithNonce?.nonceValue };
+//   } catch (err) {
+//     console.log(
+//       "🚀 ~ file: config.tsx ~ line 150 ~ getUserNonceForMetaMask ~ err",
+//       err
+//     );
+//   }
+// };
 
 const loginWithMetaMask = async (selectedBlockChainType) => {
   try {

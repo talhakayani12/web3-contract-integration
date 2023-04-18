@@ -1,21 +1,31 @@
 import { useState } from "react";
-import { getTotalSupply, deposit } from "../web3/ContractIntegrations";
+
+import {
+  getBalanceOfEthContractByWalletAddress,
+  getTotalSupply,
+} from "../web3/ContractIntegrations";
+import DepositInTreasury from "./ContractFunctions/DepositInTreasury";
+import TransferInTreasury from "./ContractFunctions/TransferIntoTreasury";
 
 function ContractFunction({ connectedWallet }) {
+  console.log(
+    "file: ContractFunctions.jsx:8 ~ ContractFunction ~ connectedWallet:",
+    connectedWallet
+  );
   const [totalSupply, setTotalSupply] = useState(0);
+  const [balanceOf, setBalanceOf] = useState(0);
 
   const handleTotalSupplyClick = async () => {
-    const depositResponse = await deposit(10);
-    console.log(
-      "file: ContractFunctions.jsx:9 ~ handleTotalSupplyClick ~ depositResponse:",
-      depositResponse
-    );
     const totalSupplyResponse = await getTotalSupply();
-    console.log(
-      "file: ContractFunctions.jsx:9 ~ handleTotalSupplyClick ~ totalSupplyResponse:",
-      totalSupplyResponse
-    );
+
     setTotalSupply(totalSupplyResponse);
+  };
+
+  const handleBalanceOfEthContractClick = async () => {
+    const balanceOfResponse = await getBalanceOfEthContractByWalletAddress(
+      connectedWallet?.walletAddress
+    );
+    setBalanceOf(balanceOfResponse);
   };
 
   return (
@@ -24,6 +34,14 @@ function ContractFunction({ connectedWallet }) {
         <button onClick={handleTotalSupplyClick}>Total Supply</button>
         <p>{totalSupply}</p>
       </div>
+      <div>
+        <button onClick={handleBalanceOfEthContractClick}>
+          Balance Of Eth
+        </button>
+        <p>{balanceOf}</p>
+      </div>
+      <DepositInTreasury />
+      <TransferInTreasury />
     </div>
   );
 }

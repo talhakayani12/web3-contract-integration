@@ -2,6 +2,8 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { loginWithMetaMask } from "./web3";
 import Dashboard from "./components/Dashboard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [connectedWallet, setConnectedWallet] = useState({
@@ -10,7 +12,7 @@ function App() {
   });
 
   const connectWallet = async () => {
-    const connectWalletResponse = await loginWithMetaMask("storagechain");
+    const connectWalletResponse = await loginWithMetaMask("polygon");
     setConnectedWallet(connectWalletResponse);
   };
 
@@ -20,6 +22,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer />
       <Dashboard
         connectedWallet={connectedWallet}
         connectWallet={connectWallet}
