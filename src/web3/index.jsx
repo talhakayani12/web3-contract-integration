@@ -2,8 +2,8 @@
 //   getUserNonceByWalletAddress,
 //   updateSignedNonceByWalletAddress,
 // } from "../store/reducers/userReducer";
-import Web3 from "web3";
-import { networks } from "./networksParams";
+import Web3 from 'web3';
+import { networks } from './networksParams';
 
 // interface NativeCurrencyInterface {
 //   name: string;
@@ -20,7 +20,7 @@ import { networks } from "./networksParams";
 // }
 
 const isMetaMaskAvailable = () => {
-  if (typeof window.ethereum !== "undefined") {
+  if (typeof window.ethereum !== 'undefined') {
     return true;
   }
   return false;
@@ -32,7 +32,7 @@ const getWeb3 = async () => {
     const accounts = await web3.eth.getAccounts();
     if (accounts?.length > 1)
       throw new Error(
-        "You have to connect only one account at a time with the site. Goto MetaMask and diconnect all other accounts from this site"
+        'You have to connect only one account at a time with the site. Goto MetaMask and diconnect all other accounts from this site'
       );
     return web3;
   }
@@ -45,41 +45,41 @@ const getCustomRPCWeb3Instance = async (RPC) => {
     const accounts = await web3.eth.getAccounts();
     if (accounts?.length > 1)
       throw new Error(
-        "You have to connect only one account at a time with the site. Goto MetaMask and diconnect all other accounts from this site"
+        'You have to connect only one account at a time with the site. Goto MetaMask and diconnect all other accounts from this site'
       );
     return web3;
   }
 };
 
 const getChainId = async () => {
-  return parseInt(await window.ethereum.request({ method: "eth_chainId" }));
+  return parseInt(await window.ethereum.request({ method: 'eth_chainId' }));
 };
 
 const addMultichainNetwork = async (networkParams) => {
   console.log(
-    "file: index.jsx:59 ~ addMultichainNetwork ~ networkParams:",
+    'file: index.jsx:59 ~ addMultichainNetwork ~ networkParams:',
     networkParams
   );
   try {
     await window.ethereum.request({
-      method: "wallet_addEthereumChain",
+      method: 'wallet_addEthereumChain',
       params: [networkParams],
     });
   } catch (err) {
-    console.log("🚀 ~ file: config.tsx ~ line 37 ~ err", err);
+    console.log('🚀 ~ file: config.tsx ~ line 37 ~ err', err);
   }
 };
 
 const addingChainNetworkIfNotExsists = async (chainId, networkParams) => {
   try {
     await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
+      method: 'wallet_switchEthereumChain',
       params: [{ chainId }],
     });
     return true;
   } catch (err) {
     console.error(
-      "file: index.jsx:77 ~ addingChainNetworkIfNotExsists ~ err:",
+      'file: index.jsx:77 ~ addingChainNetworkIfNotExsists ~ err:',
       err
     );
     if (err.code === 4902) {
@@ -97,54 +97,54 @@ const checkForMetamaskNetwork = async (selectedBlockChainType) => {
   if (!isMetaMaskAvailable()) return false;
   const chainId = await getChainId();
 
-  if (selectedBlockChainType === "storagechain") {
+  if (selectedBlockChainType === 'storagechain') {
     console.log(
-      "this is running...",
-      process.env.REACT_APP_NETWORK === "devnet"
+      'this is running...',
+      process.env.REACT_APP_NETWORK === 'devnet'
     );
-    if (process.env.REACT_APP_NETWORK === "devnet") {
+    if (process.env.REACT_APP_NETWORK === 'devnet') {
       return addingChainNetworkIfNotExsists(
-        "0x2236",
+        '0x2236',
         networks.storagechain.testnet
       );
     }
   }
 
-  if (selectedBlockChainType === "ethereum") {
-    if (process.env.REACT_APP_NETWORK !== "devnet" && chainId !== 1) {
-      return addingChainNetworkIfNotExsists("0x1", networks.ethereum.mainnet);
+  if (selectedBlockChainType === 'ethereum') {
+    if (process.env.REACT_APP_NETWORK !== 'devnet' && chainId !== 1) {
+      return addingChainNetworkIfNotExsists('0x1', networks.ethereum.mainnet);
     }
 
-    if (process.env.REACT_APP_NETWORK === "devnet" && chainId !== 5) {
-      return addingChainNetworkIfNotExsists("0x5", networks.ethereum.testnet);
-    }
-    return true;
-  }
-
-  if (selectedBlockChainType === "binance") {
-    if (process.env.REACT_APP_NETWORK !== "devnet" && chainId !== 56) {
-      return addingChainNetworkIfNotExsists("0x38", networks.binance.mainnet);
-    }
-
-    if (process.env.REACT_APP_NETWORK === "devnet" && chainId !== 97) {
-      return addingChainNetworkIfNotExsists("0x61", networks.binance.testnet);
+    if (process.env.REACT_APP_NETWORK === 'devnet' && chainId !== 5) {
+      return addingChainNetworkIfNotExsists('0x5', networks.ethereum.testnet);
     }
     return true;
   }
 
-  if (process.env.REACT_APP_NETWORK !== "devnet" && chainId !== 137) {
-    return addingChainNetworkIfNotExsists("0x89", networks.polygon.mainnet);
+  if (selectedBlockChainType === 'binance') {
+    if (process.env.REACT_APP_NETWORK !== 'devnet' && chainId !== 56) {
+      return addingChainNetworkIfNotExsists('0x38', networks.binance.mainnet);
+    }
+
+    if (process.env.REACT_APP_NETWORK === 'devnet' && chainId !== 97) {
+      return addingChainNetworkIfNotExsists('0x61', networks.binance.testnet);
+    }
+    return true;
   }
 
-  if (process.env.REACT_APP_NETWORK === "devnet" && chainId !== 80001) {
-    return addingChainNetworkIfNotExsists("0x13881", networks.polygon.testnet);
+  if (process.env.REACT_APP_NETWORK !== 'devnet' && chainId !== 137) {
+    return addingChainNetworkIfNotExsists('0x89', networks.polygon.mainnet);
+  }
+
+  if (process.env.REACT_APP_NETWORK === 'devnet' && chainId !== 80001) {
+    return addingChainNetworkIfNotExsists('0x13881', networks.polygon.testnet);
   }
   return true;
 };
 
 const getAccounts = async () => {
   const accounts = await window.ethereum.request({
-    method: "eth_requestAccounts",
+    method: 'eth_requestAccounts',
   });
   return accounts;
 };
@@ -164,7 +164,7 @@ const getAccountInformation = async (selectedBlockChainType, walletAddress) => {
     return { accounts, balance };
   } catch (err) {
     console.log(
-      "🚀 ~ file: config.tsx ~ line 104 ~ getAccountInformation ~ err",
+      '🚀 ~ file: config.tsx ~ line 104 ~ getAccountInformation ~ err',
       err
     );
   }
@@ -238,7 +238,7 @@ const loginWithMetaMask = async (selectedBlockChainType) => {
     }
     const walletInformation = await connect(selectedBlockChainType);
     console.log(
-      "file: index.jsx:209 ~ loginWithMetaMask ~ walletInformation:",
+      'file: index.jsx:209 ~ loginWithMetaMask ~ walletInformation:',
       walletInformation
     );
 
@@ -255,7 +255,7 @@ const loginWithMetaMask = async (selectedBlockChainType) => {
     return walletInformation;
   } catch (err) {
     console.log(
-      "🚀 ~ file: config.tsx ~ line 138 ~ loginWithMetaMask ~ err",
+      '🚀 ~ file: config.tsx ~ line 138 ~ loginWithMetaMask ~ err',
       err
     );
   }

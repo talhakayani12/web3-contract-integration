@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { depositInTreasuryFromServer } from "../../server";
-import { POLYGON_API, STORAGECHAIN } from "../../utils/constants";
-import { burnWrapStor } from "../../web3/ContractIntegrations/ethChainContract";
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { depositInTreasuryFromServer } from '../../server';
+import { POLYGON_API, STORAGECHAIN } from '../../utils/constants';
+import { burnWrapStor } from '../../web3/ContractIntegrations/ethChainContract';
 
 function DepositInTreasury() {
-  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState('');
   console.log(
-    "file: DepositInTreasury.js:11 ~ DepositInTreasury ~ loadingMessage:",
+    'file: DepositInTreasury.js:11 ~ DepositInTreasury ~ loadingMessage:',
     loadingMessage
   );
 
@@ -19,10 +19,10 @@ function DepositInTreasury() {
 
   const handleDepositInTreasuryAmountClick = async () => {
     try {
-      setLoadingMessage("Waiting for amount to be transfered to treasury.");
+      setLoadingMessage('Waiting for amount to be transfered to treasury.');
 
       if (!depositInTreasuryAmount) {
-        throw new Error("Please provide the amount to deposit.");
+        throw new Error('Please provide the amount to deposit.');
       }
       const depositInTreasuryResponse = await burnWrapStor(
         depositInTreasuryAmount
@@ -32,8 +32,8 @@ function DepositInTreasury() {
         depositInTreasuryResponse?.status &&
         depositInTreasuryResponse?.transactionHash
       ) {
-        toast.success("Amount Deposited.");
-        setLoadingMessage("waiting for getting wrap tokens.");
+        toast.success('Amount Deposited.');
+        setLoadingMessage('waiting for getting wrap tokens.');
 
         const storTokenFromServerResponse = await depositInTreasuryFromServer(
           POLYGON_API,
@@ -41,13 +41,13 @@ function DepositInTreasury() {
           depositInTreasuryResponse?.transactionHash
         );
         console.log(
-          "file: DepositInTreasury.js:45 ~ handleDepositInTreasuryAmountClick ~ storTokenFromServer:",
+          'file: DepositInTreasury.js:45 ~ handleDepositInTreasuryAmountClick ~ storTokenFromServer:',
           storTokenFromServerResponse
         );
       }
     } catch (err) {
       console.error(
-        "file: ContractFunctions.jsx:54 ~ handleDepositInTreasuryAmountClick ~ err:",
+        'file: ContractFunctions.jsx:54 ~ handleDepositInTreasuryAmountClick ~ err:',
         err
       );
       toast.error(err?.message);
@@ -57,13 +57,13 @@ function DepositInTreasury() {
   return (
     <div>
       <input
-        type="number"
-        placeholder="Enter the amount to deposit in treasury."
+        type='number'
+        placeholder='Enter the amount to deposit in treasury.'
         value={depositInTreasuryAmount}
         onChange={handleTreasuryAmountChange}
       />
       <button onClick={handleDepositInTreasuryAmountClick}>
-        Deposit In Treasury
+        WSTOR to STOR
       </button>
     </div>
   );
