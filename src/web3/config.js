@@ -9,6 +9,6 @@ export const CONTRACT_DETAILS = {
   8726: {
     abi: StorageChainContractABI,
     // address: "0x06F94372C780952D9B2200C75Ac1e2b36B67609c",
-    address: '0x2A7b9b12e2fAeb99FfFF0765F2f484A8D3dFbEe7',
+    address: '0xF6E87503a9c06219F07e82C27970D1415da4fBeB',
   },
 };

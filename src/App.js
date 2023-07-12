@@ -12,7 +12,7 @@ function App() {
   });
 
   const connectWallet = async () => {
-    const connectWalletResponse = await loginWithMetaMask('storagechain');
+    const connectWalletResponse = await loginWithMetaMask('polygon');
     setConnectedWallet(connectWalletResponse);
   };
 
