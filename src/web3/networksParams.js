@@ -9,7 +9,7 @@ export const networks = {
         decimals: 18,
       },
       // rpcUrls: ['https://validator-node1.invo.zone'],
-      rpcUrls: ['https://storchain-mainnet.invo.zone/'],
+      rpcUrls: ['https://testnet-validator.storagechain.io'],
       // blockExplorerUrls: [],
     },
   },
