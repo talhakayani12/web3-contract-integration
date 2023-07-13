@@ -6,6 +6,7 @@ import { transferIntoTreasury } from '../../web3/ContractIntegrations';
 
 function TransferInTreasury() {
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   console.log(
     'file: TransferIntoTreasury.js:9 ~ TransferInTreasury ~ loadingMessage:',
     loadingMessage
@@ -19,6 +20,7 @@ function TransferInTreasury() {
 
   const handletransferIntoTreasuryAmountClick = async () => {
     try {
+      setLoading(true);
       setLoadingMessage('Waiting for amount to be transfered to treasury.');
       if (!transferIntoTreasuryAmount) {
         throw new Error('Please provide the amount to Transfer.');
@@ -45,6 +47,11 @@ function TransferInTreasury() {
           'file: TransferIntoTreasury.js:34 ~ handletransferIntoTreasuryAmountClick ~ storTokenResponseFromServer:',
           wrapStorTokenResponseFromServer
         );
+
+        if (!wrapStorTokenResponseFromServer?.success) {
+          return toast.error(wrapStorTokenResponseFromServer?.message);
+        }
+        return toast.success(wrapStorTokenResponseFromServer?.message);
       }
     } catch (err) {
       console.error(
@@ -54,6 +61,7 @@ function TransferInTreasury() {
       toast.error(err?.message);
     } finally {
       setLoadingMessage('');
+      setLoading(false);
     }
   };
 
@@ -61,12 +69,15 @@ function TransferInTreasury() {
     <div>
       <input
         type='number'
-        placeholder='Enter the amount to transfer into treasury.'
+        placeholder='Enter the amount to get WSTOR tokens.'
         value={transferIntoTreasuryAmount}
         onChange={handleTreasuryAmountChange}
       />
-      <button onClick={handletransferIntoTreasuryAmountClick}>
-        STOR to WSTOR
+      <button
+        disabled={loading}
+        onClick={handletransferIntoTreasuryAmountClick}
+      >
+        {loading ? `Processing. ${loadingMessage} ` : 'STOR to WSTOR'}
       </button>
     </div>
   );

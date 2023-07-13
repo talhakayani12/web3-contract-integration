@@ -6,6 +6,8 @@ import { burnWrapStor } from '../../web3/ContractIntegrations/ethChainContract';
 
 function DepositInTreasury() {
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
   console.log(
     'file: DepositInTreasury.js:11 ~ DepositInTreasury ~ loadingMessage:',
     loadingMessage
@@ -19,7 +21,8 @@ function DepositInTreasury() {
 
   const handleDepositInTreasuryAmountClick = async () => {
     try {
-      setLoadingMessage('Waiting for amount to be transfered to treasury.');
+      setLoading(true);
+      setLoadingMessage('Waiting for WSTOR to burned.');
 
       if (!depositInTreasuryAmount) {
         throw new Error('Please provide the amount to deposit.');
@@ -33,7 +36,7 @@ function DepositInTreasury() {
         depositInTreasuryResponse?.transactionHash
       ) {
         toast.success('Amount Deposited.');
-        setLoadingMessage('waiting for getting wrap tokens.');
+        setLoadingMessage('Waiting for getting STOR tokens.');
 
         const storTokenFromServerResponse = await depositInTreasuryFromServer(
           POLYGON_API,
@@ -44,6 +47,12 @@ function DepositInTreasury() {
           'file: DepositInTreasury.js:45 ~ handleDepositInTreasuryAmountClick ~ storTokenFromServer:',
           storTokenFromServerResponse
         );
+
+        if (!storTokenFromServerResponse?.success) {
+          return toast.error(storTokenFromServerResponse?.message);
+        }
+
+        return toast.success(storTokenFromServerResponse?.message);
       }
     } catch (err) {
       console.error(
@@ -51,6 +60,9 @@ function DepositInTreasury() {
         err
       );
       toast.error(err?.message);
+    } finally {
+      setLoading(false);
+      setLoadingMessage('');
     }
   };
 
@@ -58,12 +70,12 @@ function DepositInTreasury() {
     <div>
       <input
         type='number'
-        placeholder='Enter the amount to deposit in treasury.'
+        placeholder='Enter the amount to get STOR tokens.'
         value={depositInTreasuryAmount}
         onChange={handleTreasuryAmountChange}
       />
-      <button onClick={handleDepositInTreasuryAmountClick}>
-        WSTOR to STOR
+      <button disabled={loading} onClick={handleDepositInTreasuryAmountClick}>
+        {loading ? `Processing. ${loadingMessage}` : 'WSTOR to STOR'}
       </button>
     </div>
   );

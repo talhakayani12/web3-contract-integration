@@ -3,14 +3,15 @@ import { ReactComponent as Logo } from '../assets/images/logo.svg';
 import { loginWithMetaMask } from '../web3';
 import { useState } from 'react';
 
-function Dashboard({ connectedWallet, connectWallet }) {
+function Dashboard({ connectedWallet, connectWallet, setConnectedWallet }) {
   console.log('connected Wallet: ', connectedWallet);
 
   const [currentSelectedNetwork, setCurrentSelectedNetwork] =
     useState('polygon');
 
-  const handleNetworkSwitch = (selectedBlockchain) => {
-    loginWithMetaMask(selectedBlockchain);
+  const handleNetworkSwitch = async (selectedBlockchain) => {
+    const connectedWalletResponse = await loginWithMetaMask(selectedBlockchain);
+    setConnectedWallet(connectedWalletResponse);
   };
 
   return (

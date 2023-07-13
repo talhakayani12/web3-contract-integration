@@ -26,6 +26,7 @@ function App() {
       <Dashboard
         connectedWallet={connectedWallet}
         connectWallet={connectWallet}
+        setConnectedWallet={setConnectedWallet}
       />
     </div>
   );
