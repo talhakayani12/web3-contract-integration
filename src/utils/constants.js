@@ -8,6 +8,11 @@ export const CHAINS = {
   8726: 'StorageChain',
 };
 
+export const CURRENT_SELECTED_NETWORK = {
+  80001: 'polygon',
+  8726: 'storagechain',
+};
+
 export const CHAIN_COIN_NAME = {
   80001: 'WSTOR',
   8726: 'STOR',

@@ -10,7 +10,7 @@ export const networks = {
       },
       // rpcUrls: ['https://validator-node1.invo.zone'],
       rpcUrls: ['https://testnet-validator.storagechain.io'],
-      // blockExplorerUrls: [],
+      blockExplorerUrls: ['https://evm.storscan.io/'],
     },
   },
   ethereum: {

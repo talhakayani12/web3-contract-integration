@@ -1,52 +1,38 @@
-import { useEffect, useState } from 'react';
-import { CHAIN_COIN_NAME, TOTAL_SUPPLY_MESSAGE } from '../utils/constants';
-import { getWeb3 } from '../web3';
+import React, { useEffect, useState } from 'react';
+import {
+  CHAIN_COIN_NAME,
+  TOTAL_SUPPLY_MESSAGE,
+  CURRENT_SELECTED_NETWORK,
+} from '../utils/constants';
 
 import {
   getBalanceOfEthContractByWalletAddress,
-  getTotalSupply,
+  // getTotalSupply,
 } from '../web3/ContractIntegrations';
 import DepositInTreasury from './ContractFunctions/DepositInTreasury';
 import TransferInTreasury from './ContractFunctions/TransferIntoTreasury';
 
-function ContractFunction({ connectedWallet }) {
+function ContractFunction({ connectedWallet, setCurrentSelectedNetwork }) {
   console.log(
     'file: ContractFunctions.jsx:8 ~ ContractFunction ~ connectedWallet:',
     connectedWallet
   );
-  const [totalSupply, setTotalSupply] = useState(0);
+  // const [totalSupply, setTotalSupply] = useState(0);
   const [balanceOf, setBalanceOf] = useState(0);
   const [coinName, setCoinName] = useState('');
 
-  const handleTotalSupplyClick = async () => {
-    const totalSupplyResponse = await getTotalSupply();
+  // const handleTotalSupplyClick = async () => {
+  //   const totalSupplyResponse = await getTotalSupply();
 
-    setTotalSupply(totalSupplyResponse);
-  };
-
-  // const handleBalanceOfEthContractClick = async () => {
-  //   const balanceOfResponse = await getBalanceOfEthContractByWalletAddress(
-  //     connectedWallet?.walletAddress
-  //   );
-  //   setBalanceOf(balanceOfResponse);
+  //   setTotalSupply(totalSupplyResponse);
   // };
 
-  useEffect(() => {
-    const handleCheckForSelectedChain = async () => {
-      try {
-        const web3 = await getWeb3();
-        const chainId = await web3.eth.getChainId();
-
-        setCoinName(CHAIN_COIN_NAME[chainId]);
-      } catch (err) {
-        console.log(
-          'file: ContractFunctions.jsx:37 ~ handleCheckForSelectedChain ~ err:',
-          err
-        );
-      }
-    };
-    handleCheckForSelectedChain();
-  }, []);
+  const handleBalanceOfEthContractClick = async () => {
+    const balanceOfResponse = await getBalanceOfEthContractByWalletAddress(
+      connectedWallet?.walletAddress
+    );
+    setBalanceOf(balanceOfResponse);
+  };
 
   useEffect(() => {
     const subscribeToMetamaskEvents = () => {
@@ -60,10 +46,13 @@ function ContractFunction({ connectedWallet }) {
 
       window?.ethereum?.on('chainChanged', async (chainId) => {
         setCoinName(CHAIN_COIN_NAME[parseInt(chainId, 16)]);
+        setCurrentSelectedNetwork(
+          CURRENT_SELECTED_NETWORK[parseInt(chainId, 16)]
+        );
       });
     };
     subscribeToMetamaskEvents();
-  }, []);
+  });
 
   return (
     <div>
@@ -76,13 +65,13 @@ function ContractFunction({ connectedWallet }) {
       {coinName === 'WSTOR' && (
         <>
           <div>
-            <button onClick={handleTotalSupplyClick}>
+            <button onClick={handleBalanceOfEthContractClick}>
               {`${TOTAL_SUPPLY_MESSAGE.replace(
                 '--{coin-name}--',
                 coinName
               )} coin`}
             </button>
-            <p>{totalSupply}</p>
+            <p>{balanceOf}</p>
           </div>
           <DepositInTreasury />
         </>

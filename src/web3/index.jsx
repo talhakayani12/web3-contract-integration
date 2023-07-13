@@ -104,7 +104,7 @@ const checkForMetamaskNetwork = async (selectedBlockChainType) => {
     );
     if (process.env.REACT_APP_NETWORK === 'devnet') {
       return addingChainNetworkIfNotExsists(
-        '0x2236',
+        '0x2216',
         networks.storagechain.testnet
       );
     }
